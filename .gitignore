@@ -1,2 +1,42 @@
-# Godot 4+ specific ignores
+# Godot 4
 .godot/
+
+# Godot 3 (keep for safety if opened in 3.x)
+.import/
+
+# NOTE: Do NOT ignore *.import files — they are required metadata.
+
+# IDEs and editors
+.vscode/
+.idea/
+*.code-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp/editor files
+*.tmp
+*.temp
+*~
+*.swp
+*.swo
+*.bak
+*.old
+*.orig
+
+# Build/export artifacts
+export/
+build/
+bin/
+dist/
+*.exe
+*.apk
+*.aab
+*.ipa
+*.pck
+*.zip
+*.tar
+*.tar.gz
+*.dmg
+*.app
