@@ -6,7 +6,7 @@ const BLOCK_SIZE : int = 16
 
 var blockScene = preload("res://scenes/block.tscn")
 var boardPieces = [] # Holds references to each block on the board
-var boardPositions = {} # Holds the reference of each board piece along with the coordinates of each of its corners
+var boardPositions = {} # Maps each board block Node to the coordinates of each of its corners
 
 var score : int = 0
 
@@ -26,8 +26,8 @@ func create_board():
 			boardPieces.append(blockInstance)
 			add_child(blockInstance)
 			blockInstance.position = Vector2i(j,i)*BLOCK_SIZE # Move block instance to new positon
-			if randf() < 0.2: blockInstance.activate("black", false) # 20% chance for a block to start placed
-			boardPositions[str(blockInstance)] = blockInstance.get_global_pos()
+            if randf() < 0.2: blockInstance.activate("black", false) # 20% chance for a block to start placed
+            boardPositions[blockInstance] = blockInstance.get_global_pos()
 			
 '''
 update_score
@@ -125,10 +125,10 @@ func hover_piece(blockPositions : Vector2, selectedPiece : Object):
 	var blockCoordinates = find_coordinates(get_viewport().get_mouse_position(), blockPositions, selectedPiece.chosenPiece)
 	var blocksToPlace = check_place(blockCoordinates)
 			
-	if blocksToPlace.size() == 1 || !blocksToPlace.all(func(e): return e == blocksToPlace.front()): 
-		if blocksToPlace.size() == selectedPiece.chosenPiece.size():
-			for block in blocksToPlace:
-					get_node(block).become_hovered()
+    if blocksToPlace.size() == 1 || !blocksToPlace.all(func(e): return e == blocksToPlace.front()): 
+        if blocksToPlace.size() == selectedPiece.chosenPiece.size():
+            for block in blocksToPlace:
+                    block.become_hovered()
 	
 '''
 place_piece
@@ -139,10 +139,10 @@ func place_piece(mousePosition : Vector2, blockPositions : Vector2, selectedPiec
 	var blocksToPlace = check_place(blockCoordinates)
 	if !blocksToPlace: return false
 	
-	if blocksToPlace.size() == 1 || !blocksToPlace.all(func(e): return e == blocksToPlace.front()): 
-		if blocksToPlace.size() == selectedPiece.chosenPiece.size():
-			for block in blocksToPlace:
-				get_node(block).activate(selectedPiece.get_colour(), false)
+    if blocksToPlace.size() == 1 || !blocksToPlace.all(func(e): return e == blocksToPlace.front()): 
+        if blocksToPlace.size() == selectedPiece.chosenPiece.size():
+            for block in blocksToPlace:
+                block.activate(selectedPiece.get_colour(), false)
 		else:
 			return false
 	
@@ -154,14 +154,13 @@ check_place
 - Check if the piece can be placed at coordinates given
 '''
 func check_place(coordinatesToCheck : Array):
-	var blocksToPlace = []
-	for coord in coordinatesToCheck:
-		for block in boardPositions:
-			if Geometry2D.is_point_in_polygon(coord, boardPositions[block]):
-				if !get_node(block).get_placement():
-					blocksToPlace.append(block)
-		
-	return blocksToPlace
+    var blocksToPlace = []
+    for coord in coordinatesToCheck:
+        for block in boardPositions:
+            if Geometry2D.is_point_in_polygon(coord, boardPositions[block]):
+                if !block.get_placement():
+                    blocksToPlace.append(block)
+    return blocksToPlace
 			
 '''
 find_coordinates

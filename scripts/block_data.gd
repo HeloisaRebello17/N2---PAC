@@ -14,6 +14,18 @@ const BLOCK_COLOURS : Array[String] = [ # Holds all possible colours a piece can
 	"pink",
 ]
 
+const COLOR_MAP := {
+    "red": Color(1.0, 0.0, 0.0),
+    "orange": Color(1.0, 0.5, 0.0),
+    "yellow": Color(1.0, 1.0, 0.0),
+    "green": Color(0.0, 0.8, 0.0),
+    "blue": Color(0.0, 0.5, 1.0),
+    "violet": Color(0.56, 0.0, 1.0),
+    "brown": Color(0.4, 0.26, 0.13),
+    "turquoise": Color(0.25, 0.88, 0.82),
+    "pink": Color(1.0, 0.41, 0.71),
+}
+
 const VERTICES_BLOCK : PackedVector2Array = [Vector2i(-7,-7), Vector2i(7,-7), Vector2i(7,7), Vector2i(-7,7)]
 const VERTICES_PIECE : PackedVector2Array = [Vector2i(-8,-8), Vector2i(8,-8), Vector2i(8,8), Vector2i(-8,8)]
 
@@ -51,12 +63,12 @@ func activate(colour : String, isPiece : bool):
 	if isPiece: $'CollisionPolygon2D'.polygon = VERTICES_PIECE
 	else: $'CollisionPolygon2D'.polygon = VERTICES_BLOCK
 	
-	if BLOCK_COLOURS.has(colour):
-		chosenColour = colour
-		$'Sprite2D'.self_modulate = Color(colour)
+    if BLOCK_COLOURS.has(colour):
+        chosenColour = colour
+        $'Sprite2D'.self_modulate = COLOR_MAP.get(colour, BLOCK_EMPTY)
 	else: 
 		chosenColour = BLOCK_COLOURS.pick_random()
-		$'Sprite2D'.self_modulate = Color(chosenColour)
+        $'Sprite2D'.self_modulate = COLOR_MAP.get(chosenColour, BLOCK_EMPTY)
 	
 	if !isPiece: $'AnimationPlayer'.play("place")
 

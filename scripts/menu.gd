@@ -6,23 +6,20 @@ var labelText : String
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$"Piece container/PIECE/AnimationPlayer".play("spin")
-	handle_piece()
-	# Load highscore from file and display it
-	if not FileAccess.file_exists("user://score.save"): 
-		labelText = ""
-		FileAccess.open("user://score.save", FileAccess.WRITE).store_string("0")
-	else: 
-		labelText = "HIGHSCORE\n" + FileAccess.open("user://score.save", FileAccess.READ).get_as_text()
-		
-	$'Highscore container/Label'.text = labelText
+	# Load highscore from file and display it on existing menu label
+	var highscore_label := get_node_or_null("CenterContainer2/Label")
+	if highscore_label:
+		var hs := "0"
+		if not FileAccess.file_exists("user://score.save"):
+			FileAccess.open("user://score.save", FileAccess.WRITE).store_string("0")
+		else:
+			hs = FileAccess.open("user://score.save", FileAccess.READ).get_as_text()
+		highscore_label.text = "HIGHSCORE\n" + hs
 	
 # Spawn random piece
 func handle_piece():
-	if pieceInstance: pieceInstance.queue_free()
-	pieceInstance = pieceScene.instantiate()
-	$'Piece container/PIECE'.add_child(pieceInstance)
-	pieceInstance.spawn($'Piece container/PIECE'.global_position, true)
+	# Menu scene no longer has the preview nodes; skip spawning demo piece
+	pass
 
 # Play game
 func _on_play_pressed():
