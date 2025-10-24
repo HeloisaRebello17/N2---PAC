@@ -53,10 +53,10 @@ func activate(colour : String, isPiece : bool):
 	
 	if BLOCK_COLOURS.has(colour):
 		chosenColour = colour
-		$'Sprite2D'.self_modulate = colour
+		$'Sprite2D'.self_modulate = Color(colour)
 	else: 
 		chosenColour = BLOCK_COLOURS.pick_random()
-		$'Sprite2D'.self_modulate = chosenColour
+		$'Sprite2D'.self_modulate = Color(chosenColour)
 	
 	if !isPiece: $'AnimationPlayer'.play("place")
 
